@@ -13,18 +13,22 @@ export function createRequest<
   config: Parameters<Request<Req, Res>>[0] & {
     createURL: (params: Req['params']) => string;
     method?: HTTPVerb;
+    useMetricsURL?: boolean;
   }
 ): (params: Req) => Promise<Res> {
-  return async (req: Req) => {
+  return async (req): Promise<Res> => {
     const method = config?.method ?? 'GET';
     const query = req?.query ? qs.stringify(req.query) : '';
     const body = req?.body ? JSON.stringify(req?.body) : undefined;
 
     const data = await (
       await fetch(
-        `${config.baseURL}${config.createURL(req.params)}${
-          query ? `?${query}` : ''
-        }`.replace(/([^:]\/)\/+/g, '$1'),
+        `${
+          config.useMetricsURL ? config.metricsURL : config.baseURL
+        }${config.createURL(req.params)}${query ? `?${query}` : ''}`.replace(
+          /([^:]\/)\/+/g,
+          '$1'
+        ),
         {
           method,
           headers: createHeaders({

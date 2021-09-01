@@ -22,7 +22,7 @@ describe('Random Tests', () => {
       token: AUTH_TOKEN,
     });
 
-    const apps = await client.getApps({});
+    const apps = await client.getApps({ pollEvery: 5000 });
     console.log(apps);
     expect(typeof apps.length).toBe('number');
   });

@@ -1,3 +1,5 @@
+import { TypedEmitter } from 'tiny-typed-emitter';
+
 export type HTTPVerb =
   /**
    * The `CONNECT` method establishes a tunnel to the server identified by the
@@ -58,9 +60,34 @@ export type RequestParams = {
   body?: Record<string, unknown>;
 };
 
+export type PollRequestParams = {
+  headers?: Record<string, string>;
+  query?: Record<string, string | string[]>;
+  params?: Record<string, unknown>;
+  body?: Record<string, unknown>;
+  pollEvery: number;
+};
+
 export type ResponseBody = unknown;
+
+export type PollAbleResponse<Res extends ResponseBody = ResponseBody> =
+  TypedEmitter<{
+    data: (data: Res) => void;
+    error: (error: Error) => void;
+  }> & {
+    cancel: () => void;
+  };
+
+export type PollRequest<
+  R extends PollRequestParams = PollRequestParams,
+  T extends PollAbleResponse = PollAbleResponse
+> = (config: { baseURL: string; token: string }) => (params: R) => T;
 
 export type Request<
   R extends RequestParams = {},
   T extends ResponseBody = unknown
-> = (config: { baseURL: string; token: string }) => (params: R) => Promise<T>;
+> = (config: {
+  baseURL: string;
+  metricsURL: string;
+  token: string;
+}) => (params: R) => Promise<T>;

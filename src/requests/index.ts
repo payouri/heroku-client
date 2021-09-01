@@ -17,10 +17,12 @@ type RequestIds = keyof Requests;
 
 export const buildRequests = ({
   baseURL,
+  metricsURL,
   token,
 }: {
   baseURL: string;
   token: string;
+  metricsURL: string;
 }) => {
   return Object.keys(requests).reduce<
     { [K in keyof typeof requests]: ReturnType<typeof requests[K]> }
