@@ -42,6 +42,7 @@ export function createRequest<
     }${config.createURL(req.params)}`;
 
     const computedParams: FullRequestParams = {
+      method,
       requestURL: fullURL,
       ...req,
     };

@@ -1,4 +1,4 @@
-import { RequestConfig, RequestParams } from '../requests/types';
+import { HTTPVerb, RequestConfig, RequestParams } from '../requests/types';
 
 export type ResponseCacheParams = {
   invalidateTimerSec?: number;
@@ -13,6 +13,7 @@ export type PastRequests = Record<string, PastRequest | null>;
 
 export type FullRequestParams = RequestParams & {
   requestURL: string;
+  method: HTTPVerb;
 };
 
 export type onResponseFunction = NonNullable<RequestConfig['onResponse']>;

@@ -11,6 +11,8 @@ import { stringToHash } from './utils';
 export type ResponseCacheResult = {
   onRequest: onRequestFunction;
   onResponse: onResponseFunction;
+  /** Return number of deleted cached responses */
+  inValidateFromURL: (url: string) => number;
 };
 
 const createInvalidateTimer = (
@@ -29,9 +31,12 @@ const createInvalidateTimer = (
 
 const createRequestHash = ({
   requestURL,
+  method,
   ...params
 }: FullRequestParams): string => {
-  return String(stringToHash(`${requestURL}${JSON.stringify(params)}`));
+  return String(
+    stringToHash(`${requestURL}${method}${JSON.stringify(params)}`)
+  );
 };
 
 export const createResponseCache = ({
@@ -59,5 +64,19 @@ export const createResponseCache = ({
   return {
     onRequest,
     onResponse,
+    inValidateFromURL: (url: string): number => {
+      let deletedCount = 0;
+      Object.entries(pastRequests).forEach(([hash, responseData]) => {
+        if (responseData?.url.toLowerCase() === url.toLowerCase()) {
+          if (responseData.timer) {
+            clearTimeout(responseData.timer);
+          }
+          delete pastRequests[hash];
+          deletedCount += 1;
+        }
+      });
+
+      return deletedCount;
+    },
   };
 };
