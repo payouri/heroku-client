@@ -1,4 +1,5 @@
 import { TypedEmitter } from 'tiny-typed-emitter';
+import { UnwrapPromise } from '../type.utils';
 
 export type HTTPVerb =
   /**
@@ -78,6 +79,13 @@ export type PollAbleResponse<Res extends ResponseBody = ResponseBody> =
     cancel: () => void;
   };
 
+export type RequestConfig = {
+  baseURL: string;
+  metricsURL: string;
+  token: string;
+  onRequest?: (response: UnwrapPromise<ReturnType<typeof fetch>>) => void;
+};
+
 export type PollRequest<
   R extends PollRequestParams = PollRequestParams,
   T extends PollAbleResponse = PollAbleResponse
@@ -86,8 +94,4 @@ export type PollRequest<
 export type Request<
   R extends RequestParams = {},
   T extends ResponseBody = unknown
-> = (config: {
-  baseURL: string;
-  metricsURL: string;
-  token: string;
-}) => (params: R) => Promise<T>;
+> = (config: RequestConfig) => (params: R) => Promise<T>;

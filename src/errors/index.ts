@@ -6,3 +6,13 @@ export class HerokuClientError extends Error {
     super(createHerokuClientErrorMessage(message));
   }
 }
+
+export class HerokuClientRequestError extends HerokuClientError {
+  public code: number;
+
+  constructor(code: number, message = 'unspecified error') {
+    super(createHerokuClientErrorMessage(message));
+
+    this.code = code;
+  }
+}

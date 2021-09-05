@@ -1,11 +1,8 @@
 import { buildRequests } from './requests';
+import { RequestConfig } from './requests/types';
 
-export type HerokuClientParams = {
-  /** shouldn't be needed */
-  metricsURL?: string;
-  /** shouldn't be needed */
-  baseURL?: string;
-  token: string;
+export type HerokuClientParams = Partial<Omit<RequestConfig, 'onRequest'>> & {
+  token: RequestConfig['token'];
 };
 
-export type HerokuClient = ReturnType<typeof buildRequests>;
+export type HerokuClient = ReturnType<{ requests: typeof buildRequests }>;

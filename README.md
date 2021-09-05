@@ -4,8 +4,8 @@ heroku developer api client with typescript support
 ## TODO
 * handle heroku cache 
 * handle lists
-* handle Rate-limit
-* handle metrics requests
+* ~~handle Rate-limit~~
+* ~~handle metrics requests~~
 
 ## createClient
 ```typescript

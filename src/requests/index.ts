@@ -4,6 +4,7 @@ import * as appFeatures from './appFeatures';
 import * as appWebhooks from './appWebhooks';
 import * as appWebhooksDelivery from './appWebhooksDelivery';
 import * as metrics from './metrics';
+import { RequestConfig } from './types';
 
 const requests = {
   ...apps,
@@ -21,11 +22,8 @@ export const buildRequests = ({
   baseURL,
   metricsURL,
   token,
-}: {
-  baseURL: string;
-  token: string;
-  metricsURL: string;
-}) => {
+  onRequest,
+}: RequestConfig) => {
   return Object.keys(requests).reduce<
     { [K in keyof typeof requests]: ReturnType<typeof requests[K]> }
   >((builtRequests, requestId) => {
@@ -37,6 +35,7 @@ export const buildRequests = ({
       baseURL,
       metricsURL,
       token,
+      onRequest,
     });
 
     return builtRequests;
