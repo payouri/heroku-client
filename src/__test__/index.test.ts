@@ -43,6 +43,8 @@ describe('Random Tests', () => {
 
       expect(load.step).toBe(1);
       expect(Array.isArray(load.data['load.avg.1m.max'])).toBe(true);
+      expect(Array.isArray(load.data['load.avg.1m.mean'])).toBe(true);
+      expect(Array.isArray(load.data['load.avg.1m.min'])).toBe(true);
     }
   });
 });
