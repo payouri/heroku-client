@@ -14,11 +14,16 @@ export function createRequest<
     createURL: (params: Req['params']) => string;
     method?: HTTPVerb;
     useMetricsURL?: boolean;
+    defaultHeaders?: RequestParams['headers'];
+    defaultQuery?: RequestParams['headers'];
   }
 ): (params: Req) => Promise<Res> {
   return async (req): Promise<Res> => {
     const method = config?.method ?? 'GET';
-    const query = req?.query ? qs.stringify(req.query) : '';
+    const query =
+      req?.query || config.defaultQuery
+        ? qs.stringify({ ...config.defaultQuery, ...req.query })
+        : '';
     const body = req?.body ? JSON.stringify(req?.body) : undefined;
 
     const data = await (
@@ -33,6 +38,7 @@ export function createRequest<
           method,
           headers: createHeaders({
             ...defaultHeaders,
+            ...config.defaultHeaders,
             ...req?.headers,
             Authorization: `Bearer ${config.token}`,
           }),

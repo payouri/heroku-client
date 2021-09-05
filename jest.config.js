@@ -2,5 +2,6 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  rootDir: 'src',
   moduleFileExtensions: ['js', 'jsx', 'd.ts', 'ts', 'tsx', 'json', 'node'],
 };

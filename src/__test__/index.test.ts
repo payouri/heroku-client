@@ -22,8 +22,27 @@ describe('Random Tests', () => {
       token: AUTH_TOKEN,
     });
 
-    const apps = await client.getApps({ pollEvery: 5000 });
-    console.log(apps);
+    const apps = await client.getApps({});
+
     expect(typeof apps.length).toBe('number');
+    expect(apps.length).toBeGreaterThan(0);
+
+    const [app] = apps;
+
+    if (app) {
+      const load = await client.getDynoLoad({
+        params: {
+          appId: app.id,
+        },
+        query: {
+          start_time: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          end_time: new Date().toISOString(),
+          step: '1m',
+        },
+      });
+
+      expect(load.step).toBe(1);
+      expect(Array.isArray(load.data['load.avg.1m.max'])).toBe(true);
+    }
   });
 });

@@ -3,6 +3,7 @@ import * as users from './users';
 import * as appFeatures from './appFeatures';
 import * as appWebhooks from './appWebhooks';
 import * as appWebhooksDelivery from './appWebhooksDelivery';
+import * as metrics from './metrics';
 
 const requests = {
   ...apps,
@@ -10,6 +11,7 @@ const requests = {
   ...users,
   ...appWebhooks,
   ...appWebhooksDelivery,
+  ...metrics,
 };
 
 type Requests = typeof requests;
@@ -33,6 +35,7 @@ export const buildRequests = ({
     // @ts-ignore
     builtRequests[reqId] = request({
       baseURL,
+      metricsURL,
       token,
     });
 
