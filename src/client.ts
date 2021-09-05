@@ -13,6 +13,7 @@ export const createClient = ({
   baseURL = defaultBaseURL,
   metricsURL = defaultMetricsURL,
   token,
+  cache,
 }: HerokuClientParams): HerokuClient => {
   if (!baseURL) {
     throw new HerokuClientError('Missing Heroku baseURL');
@@ -34,6 +35,16 @@ export const createClient = ({
     if (!isNaN(remaining)) {
       state.rateLimit = remaining;
     }
+    if (cache) {
+      cache.onResponse(request, response);
+    }
+  };
+
+  const onRequest: RequestConfig['onRequest'] = (request) => {
+    if (cache?.onRequest) {
+      return cache.onRequest(request);
+    }
+    return null;
   };
 
   return {
@@ -57,6 +68,7 @@ export const createClient = ({
       baseURL,
       token,
       metricsURL,
+      onRequest,
       onResponse: handleResponse,
     }),
   };

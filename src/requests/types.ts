@@ -1,5 +1,5 @@
 import { TypedEmitter } from 'tiny-typed-emitter';
-import { ComputedRequestParams } from '../cache';
+import { FullRequestParams } from '../cache/types';
 
 export type HTTPVerb =
   /**
@@ -83,8 +83,8 @@ export type RequestConfig = {
   baseURL: string;
   metricsURL: string;
   token: string;
-  onRequest?: (request: ComputedRequestParams) => Response | null;
-  onResponse?: (request: ComputedRequestParams, response: Response) => void;
+  onRequest?: <T>(request: FullRequestParams) => Response | null;
+  onResponse?: (request: FullRequestParams, response: Response) => void;
 };
 
 export type PollRequest<

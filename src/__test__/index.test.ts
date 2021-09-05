@@ -22,7 +22,7 @@ describe('Random Tests', () => {
       token: AUTH_TOKEN,
     });
 
-    const apps = await client.getApps({});
+    const apps = await client.requests.getApps({});
 
     expect(typeof apps.length).toBe('number');
     expect(apps.length).toBeGreaterThan(0);
@@ -30,7 +30,7 @@ describe('Random Tests', () => {
     const [app] = apps;
 
     if (app) {
-      const load = await client.getDynoLoad({
+      const load = await client.requests.getDynoLoad({
         params: {
           appId: app.id,
         },

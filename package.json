@@ -7,6 +7,7 @@
     "test": "npx jest --config ./jest.config.js",
     "build": "tsc",
     "clean": "rm -rf ./dist",
+    "clean-build": "npm run clean && npm run build",
     "lint": "eslint . --ext .ts --fix",
     "prepare-publish": "npm run clean && npm run lint && npm run build",
     "publish-package": "npm run prepare-publish && npm version patch --force && npm publish --access public"
