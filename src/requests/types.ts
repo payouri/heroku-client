@@ -1,5 +1,5 @@
 import { TypedEmitter } from 'tiny-typed-emitter';
-import { UnwrapPromise } from '../type.utils';
+import { ComputedRequestParams } from '../cache';
 
 export type HTTPVerb =
   /**
@@ -83,7 +83,8 @@ export type RequestConfig = {
   baseURL: string;
   metricsURL: string;
   token: string;
-  onRequest?: (response: UnwrapPromise<ReturnType<typeof fetch>>) => void;
+  onRequest?: (request: ComputedRequestParams) => Response | null;
+  onResponse?: (request: ComputedRequestParams, response: Response) => void;
 };
 
 export type PollRequest<

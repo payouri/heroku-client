@@ -28,7 +28,7 @@ export const createClient = ({
     rateLimit: 0,
   };
 
-  const onRequest: RequestConfig['onRequest'] = (response) => {
+  const handleResponse: RequestConfig['onResponse'] = (request, response) => {
     const remaining = Number(response.headers.get('RateLimit-Remaining') ?? 0);
 
     if (!isNaN(remaining)) {
@@ -57,7 +57,7 @@ export const createClient = ({
       baseURL,
       token,
       metricsURL,
-      onRequest,
+      onResponse: handleResponse,
     }),
   };
 };

@@ -22,6 +22,7 @@ export const buildRequests = ({
   baseURL,
   metricsURL,
   token,
+  onResponse,
   onRequest,
 }: RequestConfig) => {
   return Object.keys(requests).reduce<
@@ -35,6 +36,7 @@ export const buildRequests = ({
       baseURL,
       metricsURL,
       token,
+      onResponse,
       onRequest,
     });
 
