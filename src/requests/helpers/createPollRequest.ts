@@ -21,7 +21,7 @@ export function createPollRequest<
   Req extends RequestParams = RequestParams,
   Res extends ResponseBody = ResponseBody
 >(
-  params: Req,
+  params: RequestParams & Req,
   request: ReturnType<Request<Req, Res>>,
   pollEvery: number
 ): PollAbleResponse<Res> {
@@ -35,13 +35,13 @@ export function createPollRequest<
   const createRequestTimeout = (req: Req) => {
     timeOut = setTimeout(async () => {
       try {
-        const res = await request(req);
+        const res = await request({ ...req, useCache: false });
         emitter.emit('data', res);
       } catch (err) {
         emitter.emit('error', err as Error);
       }
 
-      createRequestTimeout(req);
+      createRequestTimeout({ ...req, useCache: false });
     }, pollEvery).unref();
   };
 

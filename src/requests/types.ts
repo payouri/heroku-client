@@ -59,6 +59,7 @@ export type RequestParams = {
   query?: Record<string, string | string[]>;
   params?: Record<string, unknown>;
   body?: Record<string, unknown>;
+  useCache?: boolean;
 };
 
 export type PollRequestParams = {

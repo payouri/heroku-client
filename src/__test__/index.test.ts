@@ -39,6 +39,7 @@ describe('Random Tests', () => {
           end_time: new Date().toISOString(),
           step: '1m',
         },
+        useCache: false,
       });
 
       expect(load.step).toBe(1);

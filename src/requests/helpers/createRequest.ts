@@ -29,8 +29,8 @@ export function createRequest<
     defaultHeaders?: RequestParams['headers'];
     defaultQuery?: RequestParams['headers'];
   }
-): (params: Req) => Promise<Res> {
-  return async (req): Promise<Res> => {
+): (params: RequestParams & Req) => Promise<Res> {
+  return async ({ useCache = true, ...req }): Promise<Res> => {
     const method = config?.method ?? 'GET';
     const query =
       req?.query || config.defaultQuery
@@ -47,7 +47,7 @@ export function createRequest<
       ...req,
     };
 
-    if (config.onRequest) {
+    if (useCache && config.onRequest) {
       const res = config.onRequest(computedParams);
 
       if (res) {
@@ -74,7 +74,7 @@ export function createRequest<
       }
     );
 
-    if (config.onResponse) {
+    if (useCache && config.onResponse) {
       config.onResponse(computedParams, response.clone());
     }
 
