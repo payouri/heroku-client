@@ -1,10 +1,11 @@
+import { AxiosResponse } from 'axios';
 import { HTTPVerb, RequestConfig, RequestParams } from '../requests/types';
 
 export type ResponseCacheParams = {
   invalidateTimerSec?: number;
 };
 
-export type PastRequest = Response & {
+export type PastRequest = AxiosResponse & {
   executionDate: string;
   timer?: NodeJS.Timeout;
 };

@@ -67,7 +67,7 @@ export const createResponseCache = ({
     inValidateFromURL: (url: string): number => {
       let deletedCount = 0;
       Object.entries(pastRequests).forEach(([hash, responseData]) => {
-        if (responseData?.url.toLowerCase() === url.toLowerCase()) {
+        if (responseData?.request?.url.toLowerCase() === url.toLowerCase()) {
           if (responseData.timer) {
             clearTimeout(responseData.timer);
           }

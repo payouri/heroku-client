@@ -1,13 +1,8 @@
+import { AxiosResponse } from 'axios';
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { FullRequestParams } from '../cache/types';
 
 export type HTTPVerb =
-  /**
-   * The `CONNECT` method establishes a tunnel to the server identified by the
-   * target resource.
-   */
-  | 'CONNECT'
-
   /**
    * The `DELETE` method deletes the specified resource.
    */
@@ -46,13 +41,18 @@ export type HTTPVerb =
    * The `PUT` method replaces all current representations of the target
    * resource with the request payload.
    */
-  | 'PUT'
+  | 'PUT';
 
-  /**
-   * The `TRACE` method performs a message loop-back test along the path to the
-   * target resource.
-   */
-  | 'TRACE';
+export type CustomResponse<T> =
+  | {
+      hasFailed: true;
+      error: unknown;
+      message: string;
+    }
+  | {
+      hasFailed: false;
+      data: T;
+    };
 
 export type RequestParams = {
   headers?: Record<string, string>;
@@ -84,8 +84,8 @@ export type RequestConfig = {
   baseURL: string;
   metricsURL: string;
   token: string;
-  onRequest?: <T>(request: FullRequestParams) => Response | null;
-  onResponse?: (request: FullRequestParams, response: Response) => void;
+  onRequest?: (request: FullRequestParams) => AxiosResponse | null;
+  onResponse?: (request: FullRequestParams, response: AxiosResponse) => void;
 };
 
 export type PollRequest<
@@ -96,4 +96,4 @@ export type PollRequest<
 export type Request<
   R extends RequestParams = {},
   T extends ResponseBody = unknown
-> = (config: RequestConfig) => (params: R) => Promise<T>;
+> = (config: RequestConfig) => (params: R) => Promise<CustomResponse<T>>;

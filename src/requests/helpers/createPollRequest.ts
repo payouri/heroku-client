@@ -36,7 +36,10 @@ export function createPollRequest<
     timeOut = setTimeout(async () => {
       try {
         const res = await request({ ...req, useCache: false });
-        emitter.emit('data', res);
+        if (res.hasFailed) {
+          throw res.error;
+        }
+        emitter.emit('data', res.data);
       } catch (err) {
         emitter.emit('error', err as Error);
       }

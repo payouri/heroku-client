@@ -24,10 +24,17 @@ describe('Random Tests', () => {
 
     const apps = await client.requests.getApps({});
 
-    expect(typeof apps.length).toBe('number');
-    expect(apps.length).toBeGreaterThan(0);
+    if (apps.hasFailed === true) {
+      if (apps.error instanceof Error) {
+        throw apps.error;
+      }
+      throw new Error('request failed');
+    }
 
-    const [app] = apps;
+    expect(typeof apps.data.length).toBe('number');
+    expect(apps.data.length).toBeGreaterThan(0);
+
+    const [app] = apps.data;
 
     if (app) {
       const load = await client.requests.getDynoLoad({
@@ -42,10 +49,17 @@ describe('Random Tests', () => {
         useCache: false,
       });
 
-      expect(load.step).toBe(1);
-      expect(Array.isArray(load.data['load.avg.1m.max'])).toBe(true);
-      expect(Array.isArray(load.data['load.avg.1m.mean'])).toBe(true);
-      expect(Array.isArray(load.data['load.avg.1m.min'])).toBe(true);
+      if (load.hasFailed === true) {
+        if (load.error instanceof Error) {
+          throw load.error;
+        }
+        throw new Error('request failed');
+      }
+
+      expect(load.data.step).toBe(1);
+      expect(Array.isArray(load.data.data['load.avg.1m.max'])).toBe(true);
+      expect(Array.isArray(load.data.data['load.avg.1m.mean'])).toBe(true);
+      expect(Array.isArray(load.data.data['load.avg.1m.min'])).toBe(true);
     }
   });
 });

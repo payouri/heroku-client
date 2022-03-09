@@ -30,7 +30,7 @@ export const createClient = ({
   };
 
   const handleResponse: RequestConfig['onResponse'] = (request, response) => {
-    const remaining = Number(response.headers.get('RateLimit-Remaining') ?? 0);
+    const remaining = Number(response.headers['RateLimit-Remaining'] || 0);
 
     if (!isNaN(remaining)) {
       state.rateLimit = remaining;
@@ -58,11 +58,18 @@ export const createClient = ({
         metricsURL,
       })({});
 
-      if (typeof result.remaining === 'number') {
-        state.rateLimit = result.remaining;
+      if (result.hasFailed) {
+        return result;
       }
 
-      return result.remaining;
+      if (typeof result.data.remaining === 'number') {
+        state.rateLimit = result.data.remaining;
+      }
+
+      return {
+        hasFailed: false,
+        data: result.data.remaining,
+      };
     },
     requests: buildRequests({
       baseURL,

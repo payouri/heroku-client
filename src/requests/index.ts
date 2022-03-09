@@ -26,7 +26,7 @@ export const buildRequests = ({
   onRequest,
 }: RequestConfig) => {
   return Object.keys(requests).reduce<
-    { [K in keyof typeof requests]: ReturnType<typeof requests[K]> }
+    { [K in RequestIds]: ReturnType<typeof requests[K]> }
   >((builtRequests, requestId) => {
     const reqId = requestId as RequestIds;
     const request = requests[reqId];
@@ -41,5 +41,5 @@ export const buildRequests = ({
     });
 
     return builtRequests;
-  }, {} as { [K in keyof typeof requests]: ReturnType<typeof requests[K]> });
+  }, {} as { [K in RequestIds]: ReturnType<typeof requests[K]> });
 };

@@ -1,21 +1,42 @@
-import fetch from 'isomorphic-fetch';
+import Axios, { AxiosResponse } from 'axios';
 import qs from 'query-string';
 import { FullRequestParams } from '../../cache/types';
 import { HerokuClientRequestError } from '../../errors';
 import { defaultHeaders } from '../config';
-import { HTTPVerb, Request, RequestParams, ResponseBody } from '../types';
+import {
+  CustomResponse,
+  HTTPVerb,
+  Request,
+  RequestConfig,
+  RequestParams,
+  ResponseBody,
+} from '../types';
 
-const createHeaders = (headers: Record<string, string>): Headers =>
-  new Headers(headers);
+const axiosInstance = Axios.create({
+  timeout: 3000,
+});
 
-const handleResponse = async <T>(response: Response): Promise<T> => {
+const handleResponse = async <T>(
+  request: RequestParams & { config: RequestConfig },
+  response: AxiosResponse
+): Promise<CustomResponse<T>> => {
   if (response.status >= 400) {
-    throw new HerokuClientRequestError(response.status, await response.text());
+    const message = response.statusText;
+    return {
+      hasFailed: true,
+      error: new HerokuClientRequestError(
+        response.status,
+        message,
+        request,
+        response
+      ),
+      message,
+    };
   }
 
-  const data = await response.json();
+  const data = response.data as T;
 
-  return data;
+  return { hasFailed: false, data };
 };
 
 export function createRequest<
@@ -29,14 +50,14 @@ export function createRequest<
     defaultHeaders?: RequestParams['headers'];
     defaultQuery?: RequestParams['headers'];
   }
-): (params: RequestParams & Req) => Promise<Res> {
-  return async ({ useCache = true, ...req }): Promise<Res> => {
+): (params: RequestParams & Req) => Promise<CustomResponse<Res>> {
+  return async ({ useCache = true, ...req }): Promise<CustomResponse<Res>> => {
     const method = config?.method ?? 'GET';
     const query =
       req?.query || config.defaultQuery
         ? qs.stringify({ ...config.defaultQuery, ...req.query })
         : '';
-    const body = req?.body ? JSON.stringify(req?.body) : undefined;
+
     const fullURL = `${
       config.useMetricsURL ? config.metricsURL : config.baseURL
     }${config.createURL(req.params)}`;
@@ -51,33 +72,52 @@ export function createRequest<
       const res = config.onRequest(computedParams);
 
       if (res) {
-        return handleResponse(res);
+        return handleResponse({ ...req, config }, res);
       }
     }
 
-    const response = await fetch(
-      `${
-        config.useMetricsURL ? config.metricsURL : config.baseURL
-      }${config.createURL(req.params)}${query ? `?${query}` : ''}`.replace(
-        /([^:]\/)\/+/g,
-        '$1'
-      ),
-      {
+    try {
+      const response = await axiosInstance({
         method,
-        headers: createHeaders({
+        data: req?.body,
+        headers: {
           ...defaultHeaders,
           ...config.defaultHeaders,
           ...req?.headers,
           Authorization: `Bearer ${config.token}`,
-        }),
-        body,
+          Accept: 'application/vnd.heroku+json; version=3',
+        },
+        url: `${fullURL}?${query}`,
+      });
+
+      if (useCache && config.onResponse) {
+        config.onResponse(computedParams, response);
       }
-    );
 
-    if (useCache && config.onResponse) {
-      config.onResponse(computedParams, response.clone());
+      return handleResponse({ ...req, config }, response);
+    } catch (err) {
+      if (err instanceof Error) {
+        return {
+          hasFailed: true,
+          error: new HerokuClientRequestError(
+            500,
+            err.message,
+            { ...req, config },
+            undefined
+          ),
+          message: err.message,
+        };
+      }
+      return {
+        hasFailed: true,
+        error: new HerokuClientRequestError(
+          500,
+          'request_failed_unexpectedly',
+          { ...req, config },
+          undefined
+        ),
+        message: 'request_failed_unexpectedly',
+      };
     }
-
-    return handleResponse(response);
   };
 }
