@@ -32,7 +32,7 @@ export const createClient = ({
   const handleResponse: RequestConfig['onResponse'] = (request, response) => {
     const remaining = Number(response.headers['RateLimit-Remaining'] || 0);
 
-    if (!isNaN(remaining)) {
+    if (!Number.isNaN(remaining)) {
       state.rateLimit = remaining;
     }
     if (cache) {

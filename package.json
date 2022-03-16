@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "npx jest --config ./jest.config.js",
-    "build": "tsc",
+    "build": "tsc --project ./tsconfig.lib.json",
     "clean": "rm -rf ./dist",
     "clean-build": "npm run clean && npm run build",
     "lint": "eslint . --ext .ts --fix",
@@ -19,7 +19,7 @@
     "@typescript-eslint/parser": "^4.29.3",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.2",

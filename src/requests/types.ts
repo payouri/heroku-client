@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios';
 import { TypedEmitter } from 'tiny-typed-emitter';
-import { FullRequestParams } from '../cache/types';
 
 export type HTTPVerb =
   /**
@@ -62,6 +61,11 @@ export type RequestParams = {
   useCache?: boolean;
 };
 
+export type FullRequestParams = RequestParams & {
+  requestURL: string;
+  method: HTTPVerb;
+};
+
 export type PollRequestParams = {
   headers?: Record<string, string>;
   query?: Record<string, string | string[]>;
@@ -94,6 +98,6 @@ export type PollRequest<
 > = (config: { baseURL: string; token: string }) => (params: R) => T;
 
 export type Request<
-  R extends RequestParams = {},
+  R extends RequestParams = Record<string, unknown>,
   T extends ResponseBody = unknown
 > = (config: RequestConfig) => (params: R) => Promise<CustomResponse<T>>;

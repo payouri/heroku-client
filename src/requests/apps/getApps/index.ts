@@ -3,7 +3,7 @@ import { Request } from '../../types';
 import { App } from '../types';
 
 export const getApps = (config: Parameters<Request>[0]) =>
-  createRequest<{}, App[]>({
+  createRequest<Record<string, unknown>, App[]>({
     ...config,
     createURL: () => '/apps',
   });

@@ -1,10 +1,10 @@
+import { TypedEmitter } from 'tiny-typed-emitter';
 import {
   PollAbleResponse,
   Request,
   RequestParams,
   ResponseBody,
 } from '../types';
-import { TypedEmitter } from 'tiny-typed-emitter';
 
 const addCancel = (
   emitter: TypedEmitter,

@@ -20,11 +20,12 @@
     "isolatedModules": true,
     "jsx": "react"
   },
-  "include": [
-    "src",
-  ],
-  "exclude": [
-    "node_modules",
-    "**/__test__/*"
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
   ]
 }

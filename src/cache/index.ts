@@ -1,16 +1,16 @@
+import { FullRequestParams } from '../requests/types';
 import { DEFAULT_CACHE_TIME } from './constants';
 import {
-  FullRequestParams,
-  onRequestFunction,
-  onResponseFunction,
+  OnRequestFunction,
+  OnResponseFunction,
   PastRequests,
   ResponseCacheParams,
 } from './types';
 import { stringToHash } from './utils';
 
 export type ResponseCacheResult = {
-  onRequest: onRequestFunction;
-  onResponse: onResponseFunction;
+  onRequest: OnRequestFunction;
+  onResponse: OnResponseFunction;
   /** Return number of deleted cached responses */
   inValidateFromURL: (url: string) => number;
 };
@@ -25,6 +25,7 @@ const createInvalidateTimer = (
     clearTimeout(req.timer);
   }
   setTimeout(() => {
+    // eslint-disable-next-line no-param-reassign
     delete requests[hash];
   }, time * 1000);
 };
@@ -44,7 +45,7 @@ export const createResponseCache = ({
 }: ResponseCacheParams): ResponseCacheResult => {
   const pastRequests: PastRequests = {};
 
-  const onResponse: onResponseFunction = (request, response) => {
+  const onResponse: OnResponseFunction = (request, response) => {
     const hash = createRequestHash(request);
 
     createInvalidateTimer(pastRequests, hash, invalidateTimerSec);
@@ -55,7 +56,7 @@ export const createResponseCache = ({
     };
   };
 
-  const onRequest: onRequestFunction = (request) => {
+  const onRequest: OnRequestFunction = (request) => {
     const hash = createRequestHash(request);
     if (!pastRequests[hash]) return null;
     return pastRequests[hash];

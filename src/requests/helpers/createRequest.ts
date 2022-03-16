@@ -1,10 +1,10 @@
 import Axios, { AxiosResponse } from 'axios';
 import qs from 'query-string';
-import { FullRequestParams } from '../../cache/types';
 import { HerokuClientRequestError } from '../../errors';
 import { defaultHeaders } from '../config';
 import {
   CustomResponse,
+  FullRequestParams,
   HTTPVerb,
   Request,
   RequestConfig,
@@ -26,9 +26,9 @@ const handleResponse = async <T>(
       hasFailed: true,
       error: new HerokuClientRequestError(
         response.status,
-        message,
         request,
-        response
+        response,
+        message
       ),
       message,
     };
@@ -94,16 +94,16 @@ export function createRequest<
         config.onResponse(computedParams, response);
       }
 
-      return handleResponse({ ...req, config }, response);
+      return await handleResponse({ ...req, config }, response);
     } catch (err) {
       if (err instanceof Error) {
         return {
           hasFailed: true,
           error: new HerokuClientRequestError(
             500,
-            err.message,
             { ...req, config },
-            undefined
+            undefined,
+            err.message
           ),
           message: err.message,
         };
@@ -112,9 +112,9 @@ export function createRequest<
         hasFailed: true,
         error: new HerokuClientRequestError(
           500,
-          'request_failed_unexpectedly',
           { ...req, config },
-          undefined
+          undefined,
+          'request_failed_unexpectedly'
         ),
         message: 'request_failed_unexpectedly',
       };

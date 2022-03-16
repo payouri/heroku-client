@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { HTTPVerb, RequestConfig, RequestParams } from '../requests/types';
+import { RequestConfig } from '../requests/types';
 
 export type ResponseCacheParams = {
   invalidateTimerSec?: number;
@@ -12,11 +12,6 @@ export type PastRequest = AxiosResponse & {
 
 export type PastRequests = Record<string, PastRequest | null>;
 
-export type FullRequestParams = RequestParams & {
-  requestURL: string;
-  method: HTTPVerb;
-};
+export type OnResponseFunction = NonNullable<RequestConfig['onResponse']>;
 
-export type onResponseFunction = NonNullable<RequestConfig['onResponse']>;
-
-export type onRequestFunction = NonNullable<RequestConfig['onRequest']>;
+export type OnRequestFunction = NonNullable<RequestConfig['onRequest']>;

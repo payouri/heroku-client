@@ -31,15 +31,15 @@ export const buildRequests = ({
     const reqId = requestId as RequestIds;
     const request = requests[reqId];
 
-    // @ts-ignore
-    builtRequests[reqId] = request({
-      baseURL,
-      metricsURL,
-      token,
-      onResponse,
-      onRequest,
-    });
-
-    return builtRequests;
+    return {
+      ...builtRequests,
+      [reqId]: request({
+        baseURL,
+        metricsURL,
+        token,
+        onResponse,
+        onRequest,
+      }),
+    };
   }, {} as { [K in RequestIds]: ReturnType<typeof requests[K]> });
 };
