@@ -1,8 +1,9 @@
-import { createClient } from '../index';
 import dotEnv from 'dotenv';
-dotEnv.config();
+import { createClient } from '../index';
 import { AUTH_TOKEN } from './config';
 import { HerokuClient } from '../types';
+
+dotEnv.config();
 
 describe('Random Tests', () => {
   let client: HerokuClient;

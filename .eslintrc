@@ -41,7 +41,8 @@
     "ecmaVersion": 12,
     "sourceType": "module",
     "project": [
-      "./tsconfig.json"
+      "./tsconfig.lib.json",
+      "./tsconfig.spec.json"
     ]
   },
   "plugins": [
