@@ -3,6 +3,7 @@ import * as users from './users';
 import * as appFeatures from './appFeatures';
 import * as appWebhooks from './appWebhooks';
 import * as appWebhooksDelivery from './appWebhooksDelivery';
+import * as appBuilds from './appBuilds';
 import * as metrics from './metrics';
 import { RequestConfig } from './types';
 
@@ -12,6 +13,7 @@ const requests = {
   ...users,
   ...appWebhooks,
   ...appWebhooksDelivery,
+  ...appBuilds,
   ...metrics,
 };
 
