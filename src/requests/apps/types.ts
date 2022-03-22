@@ -55,3 +55,5 @@ export type App = {
   updated_at?: string;
   web_url: string;
 };
+
+export type ConfigVars = Record<string, string>;
