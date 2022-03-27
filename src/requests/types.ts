@@ -59,6 +59,7 @@ export type RequestParams = {
   params?: Record<string, unknown>;
   body?: Record<string, unknown>;
   useCache?: boolean;
+  timeout?: number;
 };
 
 export type FullRequestParams = RequestParams & {
