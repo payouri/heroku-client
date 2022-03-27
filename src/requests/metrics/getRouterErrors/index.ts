@@ -1,11 +1,6 @@
 import { createRequest } from '../../helpers/createRequest';
 import { Request } from '../../types';
-import {
-  DynoMetricsMap,
-  RouterMetricsTypes,
-  Metrics,
-  RouterMetricsMap,
-} from '../types';
+import { Metrics, RouterMetricsMap, RouterMetricsTypes } from '../types';
 
 export const getRouterErrors = (config: Parameters<Request>[0]) =>
   createRequest<
@@ -25,7 +20,7 @@ export const getRouterErrors = (config: Parameters<Request>[0]) =>
   >({
     ...config,
     createURL: ({ appId }) =>
-      `/metrics/${appId}/dyno/${RouterMetricsTypes.ERRORS}`,
+      `/metrics/${appId}/router/${RouterMetricsTypes.ERRORS}`,
     method: 'GET',
     useMetricsURL: true,
     defaultQuery: {

@@ -25,7 +25,7 @@ export const getRouterStatus = (config: Parameters<Request>[0]) =>
   >({
     ...config,
     createURL: ({ appId }) =>
-      `/metrics/${appId}/dyno/${RouterMetricsTypes.STATUS}`,
+      `/metrics/${appId}/router/${RouterMetricsTypes.STATUS}`,
     method: 'GET',
     useMetricsURL: true,
     defaultQuery: {

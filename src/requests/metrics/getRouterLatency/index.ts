@@ -20,7 +20,7 @@ export const getRouterLatency = (config: Parameters<Request>[0]) =>
   >({
     ...config,
     createURL: ({ appId }) =>
-      `/metrics/${appId}/dyno/${RouterMetricsTypes.LATENCY}`,
+      `/metrics/${appId}/router/${RouterMetricsTypes.LATENCY}`,
     method: 'GET',
     useMetricsURL: true,
     defaultQuery: {

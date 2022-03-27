@@ -16,9 +16,9 @@ export type HerokuClient = {
   requests: ReturnType<typeof buildRequests>;
 };
 
-export * from 'requests/apps/types';
-export * from 'requests/appFeatures/types';
-export * from 'requests/appWebhooks/types';
-export * from 'requests/appWebhooksDelivery/types';
-export * from 'requests/metrics/types';
-export * from 'requests/miscellaneous/getRateLimit/types';
+export * from './requests/apps/types';
+export * from './requests/appFeatures/types';
+export * from './requests/appWebhooks/types';
+export * from './requests/appWebhooksDelivery/types';
+export * from './requests/metrics/types';
+export * from './requests/miscellaneous/getRateLimit/types';
