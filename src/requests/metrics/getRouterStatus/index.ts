@@ -1,10 +1,10 @@
 import { createRequest } from '../../helpers/createRequest';
 import { Request } from '../../types';
 import {
-  DynoMetricsMap,
-  RouterMetricsTypes,
+  DataStepInMinutes,
   Metrics,
   RouterMetricsMap,
+  RouterMetricsTypes,
 } from '../types';
 
 export const getRouterStatus = (config: Parameters<Request>[0]) =>
@@ -18,7 +18,7 @@ export const getRouterStatus = (config: Parameters<Request>[0]) =>
         process_type?: 'web';
         start_time: string;
         end_time: string;
-        step: '1m' | '10m' | '60m' | '120m';
+        step: DataStepInMinutes;
       };
     },
     Metrics<RouterMetricsMap[RouterMetricsTypes.STATUS]>
