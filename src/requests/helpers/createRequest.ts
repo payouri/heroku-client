@@ -53,7 +53,7 @@ export function createRequest<
   }
 ): (params: RequestParams & Req) => Promise<CustomResponse<Res>> {
   return async ({
-    useCache = true,
+    useCache = false,
     timeout,
     ...req
   }): Promise<CustomResponse<Res>> => {
@@ -73,10 +73,10 @@ export function createRequest<
       ...req,
     };
 
-    if (useCache && config.onRequest) {
+    if (config.onRequest) {
       const res = config.onRequest(computedParams);
 
-      if (res) {
+      if (res && useCache) {
         return handleResponse({ ...req, config }, res);
       }
     }
@@ -96,7 +96,7 @@ export function createRequest<
         timeout,
       });
 
-      if (useCache && config.onResponse) {
+      if (config.onResponse) {
         config.onResponse(computedParams, response);
       }
 

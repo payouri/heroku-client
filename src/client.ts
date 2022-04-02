@@ -1,3 +1,4 @@
+import { Logger } from 'winston';
 import { defaultBaseURL, defaultMetricsURL } from './constants';
 import { HerokuClientError } from './errors';
 import { buildRequests } from './requests';
@@ -14,6 +15,7 @@ export const createClient = ({
   metricsURL = defaultMetricsURL,
   token,
   cache,
+  debug,
 }: HerokuClientParams): HerokuClient => {
   if (!baseURL) {
     throw new HerokuClientError('Missing Heroku baseURL');
@@ -25,14 +27,25 @@ export const createClient = ({
     throw new HerokuClientError('Missing Heroku token');
   }
 
+  let logger: Logger | undefined;
+
+  if (debug) {
+    import('./logger').then(({ logger: definedLogger }) => {
+      logger = definedLogger;
+    });
+  }
+
   const state: ClientInnerState = {
     rateLimit: 0,
   };
 
   const handleResponse: RequestConfig['onResponse'] = (request, response) => {
-    const remaining = Number(response.headers['RateLimit-Remaining'] || 0);
+    const remaining = Number(response.headers['ratelimit-remaining'] || 0);
 
     if (!Number.isNaN(remaining)) {
+      if (logger) {
+        logger.debug(`Rate Limit Remaining: ${remaining}`);
+      }
       state.rateLimit = remaining;
     }
     if (cache) {
@@ -56,6 +69,7 @@ export const createClient = ({
         baseURL,
         token,
         metricsURL,
+        getLogger: () => logger,
       })({});
 
       if (result.hasFailed) {
@@ -72,6 +86,7 @@ export const createClient = ({
       };
     },
     requests: buildRequests({
+      getLogger: () => logger,
       baseURL,
       token,
       metricsURL,

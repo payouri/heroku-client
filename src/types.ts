@@ -8,6 +8,7 @@ export type HerokuClientParams = Partial<
 > & {
   token: RequestConfig['token'];
   cache?: ResponseCacheResult;
+  debug?: boolean;
 };
 
 export type HerokuClient = {

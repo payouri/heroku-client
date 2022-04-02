@@ -1,9 +1,6 @@
-import dotEnv from 'dotenv';
 import { createClient } from '../index';
 import { AUTH_TOKEN } from './config';
-import { HerokuClient } from '../types';
-
-dotEnv.config();
+import { DataStepInMinutes, HerokuClient } from '../types';
 
 describe('Random Tests', () => {
   let client: HerokuClient;
@@ -21,6 +18,11 @@ describe('Random Tests', () => {
   test('should request apps', async () => {
     client = createClient({
       token: AUTH_TOKEN,
+      debug: true,
+    });
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 100);
     });
 
     const apps = await client.requests.getApps({});
@@ -45,7 +47,7 @@ describe('Random Tests', () => {
         query: {
           start_time: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
           end_time: new Date().toISOString(),
-          step: '1m',
+          step: DataStepInMinutes.$1M,
         },
         useCache: false,
       });
