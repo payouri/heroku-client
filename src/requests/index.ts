@@ -1,18 +1,27 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as apps from './apps';
-import * as users from './users';
+import * as dynos from './appDyno';
 import * as appFeatures from './appFeatures';
 import * as appWebhooks from './appWebhooks';
 import * as appWebhooksDelivery from './appWebhooksDelivery';
 import * as metrics from './metrics';
+import * as miscellaneous from './miscellaneous';
+import * as formation from './formation';
+import * as logDrain from './logDrain';
+import * as users from './users';
 import { RequestConfig } from './types';
 
 const requests = {
   ...apps,
+  ...dynos,
   ...appFeatures,
-  ...users,
   ...appWebhooks,
   ...appWebhooksDelivery,
+  ...formation,
+  ...logDrain,
   ...metrics,
+  ...miscellaneous,
+  ...users,
 };
 
 type Requests = typeof requests;
