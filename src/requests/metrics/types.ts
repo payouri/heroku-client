@@ -1,3 +1,10 @@
+export enum DataStepInMinutes {
+  $1M = '1m',
+  $10M = '10m',
+  $60M = '60m',
+  $120M = '120m',
+}
+
 export type DataArray = number[];
 
 export type NullableDataArray = (number | null)[];

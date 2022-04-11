@@ -11,9 +11,10 @@ import {
   RequestParams,
   ResponseBody,
 } from '../types';
+import { DEFAULT_REQUEST_TIMEOUT } from './constants';
 
 const axiosInstance = Axios.create({
-  timeout: 3000,
+  timeout: DEFAULT_REQUEST_TIMEOUT,
 });
 
 const handleResponse = async <T>(
@@ -51,7 +52,11 @@ export function createRequest<
     defaultQuery?: RequestParams['headers'];
   }
 ): (params: RequestParams & Req) => Promise<CustomResponse<Res>> {
-  return async ({ useCache = true, ...req }): Promise<CustomResponse<Res>> => {
+  return async ({
+    useCache = false,
+    timeout,
+    ...req
+  }): Promise<CustomResponse<Res>> => {
     const method = config?.method ?? 'GET';
     const query =
       req?.query || config.defaultQuery
@@ -68,10 +73,10 @@ export function createRequest<
       ...req,
     };
 
-    if (useCache && config.onRequest) {
+    if (config.onRequest) {
       const res = config.onRequest(computedParams);
 
-      if (res) {
+      if (res && useCache) {
         return handleResponse({ ...req, config }, res);
       }
     }
@@ -88,9 +93,10 @@ export function createRequest<
           Accept: 'application/vnd.heroku+json; version=3',
         },
         url: `${fullURL}?${query}`,
+        timeout,
       });
 
-      if (useCache && config.onResponse) {
+      if (config.onResponse) {
         config.onResponse(computedParams, response);
       }
 

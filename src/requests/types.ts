@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { TypedEmitter } from 'tiny-typed-emitter';
+import { Logger } from 'winston';
 
 export type HTTPVerb =
   /**
@@ -59,6 +60,7 @@ export type RequestParams = {
   params?: Record<string, unknown>;
   body?: Record<string, unknown>;
   useCache?: boolean;
+  timeout?: number;
 };
 
 export type FullRequestParams = RequestParams & {
@@ -90,6 +92,7 @@ export type RequestConfig = {
   token: string;
   onRequest?: (request: FullRequestParams) => AxiosResponse | null;
   onResponse?: (request: FullRequestParams, response: AxiosResponse) => void;
+  getLogger: () => Logger | undefined;
 };
 
 export type PollRequest<
