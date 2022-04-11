@@ -1,12 +1,9 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": "./src",
     "outDir": "./dist",
     "target": "esnext",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
     "allowJs": true,
     "declaration": true,
     "skipLibCheck": true,
@@ -19,7 +16,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react",
-    "baseUrl": "./src",
+    "baseUrl": "./src"
   },
   "references": [
     {

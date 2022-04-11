@@ -1,13 +1,12 @@
 {
   "name": "@youri-kane/heroku-client",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "heroku developer api client with typescript support",
   "main": "dist/index.js",
   "scripts": {
     "test": "npx jest --config ./jest.config.js",
     "build": "tsc --project ./tsconfig.lib.json",
-    "clean": "rm -rf ./dist",
-    "clean-build": "npm run clean && npm run build",
+    "clean-build": "tsc --build --clean --project ./tsconfig.lib.json",
     "lint": "eslint . --ext .ts --fix",
     "prepare-publish": "npm run lint && npm run clean-build",
     "publish-package": "npm run prepare-publish && npm version patch --force && npm publish --access public"
