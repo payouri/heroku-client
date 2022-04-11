@@ -6,9 +6,8 @@
   "scripts": {
     "test": "npx jest --config ./jest.config.js",
     "build": "tsc --project ./tsconfig.lib.json",
-    "clean-build": "tsc --build --clean --project ./tsconfig.lib.json",
     "lint": "eslint . --ext .ts --fix",
-    "prepare-publish": "npm run lint && npm run clean-build",
+    "prepare-publish": "npm run lint && npm run build",
     "publish-package": "npm run prepare-publish && npm version patch --force && npm publish --access public"
   },
   "devDependencies": {
