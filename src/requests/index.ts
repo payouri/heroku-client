@@ -14,8 +14,8 @@ import { RequestConfig } from './types';
 
 const requests = {
   ...apps,
-  ...dynos,
   ...appFeatures,
+  ...dynos,
   ...appWebhooks,
   ...appWebhooksDelivery,
   ...appBuilds,
