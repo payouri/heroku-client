@@ -5,4 +5,7 @@ export * from './updateApp';
 export * from './deleteApp';
 export * from './getApps';
 export * from './getApp';
+export * from './getConfigVars';
+export * from './getReleaseConfigVars';
+export * from './updateConfigVars';
 export * from './types';

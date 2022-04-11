@@ -4,6 +4,7 @@ import * as dynos from './appDyno';
 import * as appFeatures from './appFeatures';
 import * as appWebhooks from './appWebhooks';
 import * as appWebhooksDelivery from './appWebhooksDelivery';
+import * as appBuilds from './appBuilds';
 import * as metrics from './metrics';
 import * as miscellaneous from './miscellaneous';
 import * as formation from './formation';
@@ -17,6 +18,7 @@ const requests = {
   ...appFeatures,
   ...appWebhooks,
   ...appWebhooksDelivery,
+  ...appBuilds,
   ...formation,
   ...logDrain,
   ...metrics,
