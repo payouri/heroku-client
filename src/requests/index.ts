@@ -9,6 +9,7 @@ import * as metrics from './metrics';
 import * as miscellaneous from './miscellaneous';
 import * as formation from './formation';
 import * as logDrain from './logDrain';
+import * as logSession from './logSession';
 import * as users from './users';
 import { RequestConfig } from './types';
 
@@ -21,6 +22,7 @@ const requests = {
   ...appBuilds,
   ...formation,
   ...logDrain,
+  ...logSession,
   ...metrics,
   ...miscellaneous,
   ...users,
