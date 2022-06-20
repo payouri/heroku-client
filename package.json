@@ -1,6 +1,6 @@
 {
   "name": "@youri-kane/heroku-client",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "heroku developer api client with typescript support",
   "main": "dist/index.js",
   "scripts": {
